@@ -33,7 +33,7 @@ class WhatsAppExtension {
 	/** @var string Whatsapp Tech Provider Business ID */
 	const TP_BUSINESS_ID = '1421860479064677';
 	/** @var string base url for meta stefi endpoint */
-	const BASE_STEFI_ENDPOINT_URL = 'https://api.81563.od.facebook.com';
+	const BASE_STEFI_ENDPOINT_URL = 'https://api.od.facebook.com';
 	/** @var string Default language for Library Template */
 	const DEFAULT_LANGUAGE = 'en';
 
@@ -225,7 +225,10 @@ class WhatsAppExtension {
 		wc_get_logger()->log(
 			'debug',
 			'WhatsApp outgoing event: ' . wp_json_encode( $event_base_object ),
-			array( 'source' => 'facebook-for-woocommerce' )
+			array(
+				'source'             => 'facebook-for-woocommerce',
+				'wa_installation_id' => $wa_installation_id,
+			)
 		);
 
 		$response        = wp_remote_post( $base_url, $options );
