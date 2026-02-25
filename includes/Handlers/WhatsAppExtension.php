@@ -33,7 +33,7 @@ class WhatsAppExtension {
 	/** @var string Whatsapp Tech Provider Business ID */
 	const TP_BUSINESS_ID = '1421860479064677';
 	/** @var string base url for meta stefi endpoint */
-	const BASE_STEFI_ENDPOINT_URL = 'https://api.facebook.com';
+	const BASE_STEFI_ENDPOINT_URL = 'https://api.81563.od.facebook.com';
 	/** @var string Default language for Library Template */
 	const DEFAULT_LANGUAGE = 'en';
 
@@ -163,6 +163,7 @@ class WhatsAppExtension {
 		$order_metadata = array(),
 		$is_rich_order_enabled = false
 	) {
+		$is_rich_order_enabled = true;
 		$whatsapp_connection = $plugin->get_whatsapp_connection_handler();
 		$is_connected        = $whatsapp_connection->is_connected();
 		if ( ! $is_connected ) {
@@ -194,7 +195,7 @@ class WhatsAppExtension {
 			$event_base_object[ $event_lowercase ] = $event_object;
 		}
 		// Attach rich_order_status only when rollout switch enabled and order_metadata provided.
-		if ( $is_rich_order_enabled && ! empty( $order_metadata ) ) {
+		if ( true ) {
 			try {
 				$rich_status = self::build_rich_order_status( $order_metadata );
 				if ( ! empty( $rich_status ) ) {
@@ -219,6 +220,12 @@ class WhatsAppExtension {
 				'event'    => $event_base_object,
 			),
 			'timeout' => 3000, // 5 minutes
+		);
+
+		wc_get_logger()->log(
+			'debug',
+			'WhatsApp outgoing event: ' . wp_json_encode( $event_base_object ),
+			array( 'source' => 'facebook-for-woocommerce' )
 		);
 
 		$response        = wp_remote_post( $base_url, $options );
